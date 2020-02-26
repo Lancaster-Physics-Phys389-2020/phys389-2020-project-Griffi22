@@ -15,9 +15,9 @@ class Update:
     pos and vel in m
     """
 
-    #G=6.67408E-11
-    G=scipy.constants.G
-
+    """Change to SR motion EQn's split acceleration into subclass"""
+    
+#    initialising the program with the required particle state properties
     def __init__(self, initPos, initVel, initAcc, Name, Mass,Charge,KE, deltaT):
         self.Name = Name
         self.pos = np.array(initPos,dtype=float)
@@ -30,18 +30,14 @@ class Update:
 
     def __repr__(self):
         return('Particle: {0}, Mass: {1:12.3e}, pos: {2}, vel: {3}, acc: {4}'.format(self.Name,self.mass,self.pos, self.vel,self.acc))
-
-        #print('Particle: {0}, Mass: {1:12.3e}, pos: {2}, vel: {3}, acc: {4}'.format(self.Name,self.mass,self.pos, self.vel,self.acc))
-
+#   updating KE
     def KineticEnergy(self):
         self.KE=0.5*self.mass*np.linalg.norm(self.vel)**2
-#        print('vel: ',self.vel)
-#        print('Vel: ',np.linalg.norm(self.vel))
         return 0.5*self.mass*np.vdot(self.vel,self.vel)
-
+# updating mom
     def momentum(self):
         return self.mass*np.array(self.vel,dtype=float)
-    
+#updating pos, vel, acc
     def update(self):
         self.pos +=  self.vel*self.DeltaT
         self.vel +=  self.acc*self.DeltaT

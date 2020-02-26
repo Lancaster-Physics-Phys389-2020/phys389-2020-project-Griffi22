@@ -3,8 +3,11 @@ import math
 import copy
 import scipy.constants
 from Fields import fields
+"""This is a mess currently the hashed code is an attempt at sign change and 
+an attempt at an optimisation by only simulating the effect of local E sources"""
 
-
+"""The non hashed code is a functioning version of source effect
+ although it doesn't work as a functioning accelerator due to the sign change not being implemented"""
 class Field_effect:
         def __init__(self, P_state_pos, P_state_charge, P_state_vel):
             self.P_pos=P_state_pos
