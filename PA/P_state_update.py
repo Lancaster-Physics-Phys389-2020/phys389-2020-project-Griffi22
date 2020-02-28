@@ -39,6 +39,7 @@ class Update:
         return self.mass*np.array(self.vel,dtype=float)
 #updating pos, vel, acc
     def update(self):
+        print('Vel:  ', np.linalg.norm(self.vel))
         self.pos +=  self.vel*self.DeltaT
         self.vel +=  self.acc*self.DeltaT
         self.E=Field_effect.E_effect(self.pos,self.vel,self.charge)

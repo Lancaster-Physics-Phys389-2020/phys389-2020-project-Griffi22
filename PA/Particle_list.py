@@ -8,13 +8,13 @@ import pandas as pd
 from P_state_update import Update
 
 
-#Entryformat= ([initPos], [initVel], [initAcc], [Name], [Mass],[Charge], [deltaT])
+#Entryformat= ([initPos], [initVel], [initAcc], [Name], [Mass],[Charge],KE, [deltaT])
 class Particle_data_list:
 #    DeltaT=float(input("deltaT: "))
 #    automatic setting deltaT for speed of dev delete later
-    DeltaT=0.1
+    DeltaT=0.01
 #    defining the list of particles and their inital properties for simlation
-    Particle_list={'Proton':Update([100,0.0001,0],[0,10,0],[0,0,0],'Proton',const.m_p,const.elementary_charge,0, DeltaT),
+    Particle_list={'Proton':Update([1000,0.0,0],[0,5,0],[0,0,0],'Proton',const.m_p,const.elementary_charge,0, DeltaT),
                    'Electron':Update([0,0,0],[0,0,0],[0,0,0],'Electron',1,-1,0, DeltaT),
                    'Positron':Update([0,0,0],[0,0,0],[0,0,0],'Positron',1,1,0, DeltaT),
                    'Pion+':Update([0,0,0],[0,0,0],[0,0,0],'Pion+',1,1,0, DeltaT),

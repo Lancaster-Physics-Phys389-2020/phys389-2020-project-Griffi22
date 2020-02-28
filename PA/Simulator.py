@@ -5,7 +5,7 @@ import scipy.constants as const
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import mpl_toolkits.mplot3d.axes3d
-
+import timeit
 import pandas as pd
 from Fields import fields
 #from Field_effect import Field_effect
@@ -13,12 +13,14 @@ from P_state_update import Update
 from Particle_list import Particle_data_list as PDL
 
 class Simulation:
+    "starting a program run timer"
+    start = timeit.default_timer()
     "inital class variables"
     #time variables
         #start time
     T_i=0
         #end time (adjusted so timestep is accounted for)
-    T_f=round(40/PDL.DeltaT)
+    T_f=round(50/PDL.DeltaT)
     
 #    Particle selection
     print("Particle list: Proton, Electron, Positron, Pion+, Pion-, Koan+, Kaon-")
@@ -32,7 +34,7 @@ class Simulation:
     Particle_state=PDL.Particle_list[particle_input]
 
     #creating the empty the dataframe
-    data_np=pd.DataFrame([{'Time': 0, 'Pos': [],'Vel': [],'Acc': [],'KE': []}])
+    data_np=pd.DataFrame([{'Time': [], 'Pos': [],'Vel': [],'Acc': [],'KE': []}])
 #    running simulation over timesteps
     
     for t in range(T_i,T_f):
@@ -62,35 +64,41 @@ class Simulation:
     threedee.set_ylabel('Pos y')
     threedee.set_zlabel('Pos z')
     
+    
+    animate=True
+    if animate==True:
+    
 #    Plotting an animation of the particles path
-    fig = plt.figure(1)
-    ax =  mpl_toolkits.mplot3d.axes3d.Axes3D(fig)
-    
-#    creating an empty list for the particle position data and then additing the data enrty by entry.
-    gen_=[]
-    while i < len(data_np):
-        gen_.append(np.array([data_np['Pos'].str[0][i],data_np['Pos'].str[1][i],data_np['Pos'].str[2][i]]))
-        i += 1
-#        sets animation line to follow the particle position data
-    def update(num, data, line):
-        line.set_data(data[:2, :num])
-        line.set_3d_properties(data[2, :num])
-    
-    data = np.array(list(gen_)).T
-    line, = ax.plot(data[0, 0:1], data[1, 0:1], data[2, 0:1]) #nope, no error here.
-    
-    #Setting the axes properties
-    ax.set_xlim3d([100, -100])
-    ax.set_xlabel('X')
-    
-    ax.set_ylim3d([-100, 100])
-    ax.set_ylabel('Y')
-    
-    ax.set_zlim3d([-2, 2])
-    ax.set_zlabel('Z')
-#    animation command to create the animation
-    ani = animation.FuncAnimation(fig, update, len(data_np), fargs=(data, line), interval=1, blit=False)
-    
-    plt.show()
+        fig = plt.figure(1)
+        ax =  mpl_toolkits.mplot3d.axes3d.Axes3D(fig)
         
+#    creating an empty list for the particle position data and then additing the data enrty by entry.
+        gen_=[]
+        while i < len(data_np):
+            gen_.append(np.array([data_np['Pos'].str[0][i],data_np['Pos'].str[1][i],data_np['Pos'].str[2][i]]))
+            i += 1
+    #        sets animation line to follow the particle position data
+        def update(num, data, line):
+            line.set_data(data[:2, :num])
+            line.set_3d_properties(data[2, :num])
+        
+        data = np.array(list(gen_)).T
+        line, = ax.plot(data[0, 0:1], data[1, 0:1], data[2, 0:1]) #nope, no error here.
+        
+        #Setting the axes properties
+        ax.set_xlim3d([100, -100])
+        ax.set_xlabel('X')
+        
+        ax.set_ylim3d([-100, 100])
+        ax.set_ylabel('Y')
+        
+        ax.set_zlim3d([-2, 2])
+        ax.set_zlabel('Z')
+    #    animation command to create the animation
+        ani = animation.FuncAnimation(fig, update, len(data_np), fargs=(data, line), interval=1, blit=False)
+        
+    plt.show()
+    
+    stop = timeit.default_timer()
+    print('Run Time: ', stop - start)  
     

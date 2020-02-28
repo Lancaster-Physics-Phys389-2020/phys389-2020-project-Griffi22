@@ -3,57 +3,45 @@ import math
 import copy
 import scipy.constants
 from Fields import fields
-"""This is a mess currently the hashed code is an attempt at sign change and 
-an attempt at an optimisation by only simulating the effect of local E sources"""
+import timeit
 
-"""The non hashed code is a functioning version of source effect
- although it doesn't work as a functioning accelerator due to the sign change not being implemented"""
 class Field_effect:
         def __init__(self, P_state_pos, P_state_charge, P_state_vel):
             self.P_pos=P_state_pos
             self.P_vel=P_state_vel
             self.P_charge=P_state_charge
-            
+            #resultant effect of local electric source plates
         def E_effect(P_pos,P_vel,P_charge):
+            #timing used for testing optimisation
+#            start_0=timeit.default_timer()
             E=0
-            Phi_p= math.atan(P_pos[1]/P_pos[0])
-            print(P_pos[1]/P_pos[0], '  y/x')
-#            j=0
-##            print(len(fields.E_prop_list()[0])-1)
-#            while j<len(fields.E_prop_list()[0])-1:
-#                Phi_E_f=math.atan(fields.E_prop_list()[0][j+1][1]/fields.E_prop_list()[0][j+1][0])
-#                Phi_E_b=math.atan(fields.E_prop_list()[0][j][1]/(fields.E_prop_list()[0][j][0]+scipy.constants.hbar))
-#                print('j, phiP, PhiEf, PhiEb   ',j,Phi_p,Phi_E_f,Phi_E_b)
-#                
-#                
-#                
-#                if Phi_E_f>Phi_p and Phi_p>Phi_E_b:
-            for i in range(0,len(fields.E_prop_list()[0])):
-                            #print('P_pos: ',P_pos,'E_pos',np.array(fields.E_prop_list()[0][i],dtype=float))
-#                            sign=(-1)**(i-j)
-                            
-                P_to_Es_Distance=P_pos-np.array(fields.E_prop_list()[0][i], dtype=float)
-                            
-                            #E_i=(1/(4*scipy.constants.pi*scipy.constants.epsilon_0))*fields.E_prop_list()[1][i]*P_to_Es_Distance/(np.linalg.norm(P_to_Es_Distance))**3
-                            #print((np.linalg.norm(P_to_Es_Distance)))
-                E_i=(fields.E_prop_list()[1][i]/(2*scipy.constants.epsilon_0)*(1-(np.linalg.norm(P_to_Es_Distance))/((np.linalg.norm(P_to_Es_Distance)**2+fields.E_prop_list()[2]**2)**0.5))*(P_to_Es_Distance)/(np.linalg.norm(P_to_Es_Distance)))
-                E += E_i  
-#                j=j+1
-#                print('loop ended, E= ',E)
-                
-#                print('E=: ',E)
-            return(E)
-        def M_effect(P_pos,P_vel,P_mass,P_charge,KE):
-#            theta=math.atan(P_pos[0]/P_pos[1])
-#            B_0=KE/(scipy.constants.elementary_charge*scipy.constants.speed_of_light*50)
-#            B=fields.M_prop_list(theta,B_0)
-            
-#            bz=-(1.67*10**-27)*1000/((1.602*10**-19)*1000)
-#            print(bz)
-            bz=-(P_mass*np.linalg.norm(P_vel)/((P_charge)*fields.E_prop_list()[3]))
-#            print(bz)
-            B=np.array([0.0,0.0,bz], dtype=float)
+            #calculate the angluar position of particle in accelerator
+            Phi_p=np.angle(P_pos[0]+1j*P_pos[1], deg=True)%360
+            i=0
+            #loop over E plates
+            while i<len(fields.E_prop_list()[0])-1:
+#                calculate the angular position of plate (i) and next plate (i+1) in the accelerator path
+                 Phi_E_i1=round(np.angle(fields.E_prop_list()[0][i+1][0]+fields.E_prop_list()[0][i+1][1]*1j, deg=True)%360)
+                 Phi_E_i0=round(np.angle(fields.E_prop_list()[0][i][0]+fields.E_prop_list()[0][i][1]*1j, deg=True)%360)
+#                 if the angular position of the particle lies between the two plates then calculate the feild produced by the plates
+                 if Phi_E_i1>=Phi_p>=Phi_E_i0 or i==len(fields.E_prop_list()[0])-2: #i==len(fields...) is added for a looping as final plate at 360 degrees=0 degrees
+                     for Index in range(i,i+2):
+                         #oscillation of the charge of the plates such that plates ahead attract and plates behind repel
+                         sign=(-1)**(Index-i)
+                         #plate to particle position vector
+                         P_to_Es_Distance=P_pos-np.array(fields.E_prop_list()[0][Index], dtype=float)
+                         #calculating E from plate (Index) using a finite charged 2D dis formula
+                         E_index=sign*(fields.E_prop_list()[1][Index]/(2*scipy.constants.epsilon_0)*(1-(np.linalg.norm(P_to_Es_Distance))/((np.linalg.norm(P_to_Es_Distance)**2+fields.E_prop_list()[2]**2)**0.5))*(P_to_Es_Distance)/(np.linalg.norm(P_to_Es_Distance)))
+                         E += E_index
+                     return(E)
+                     "cashe i for future optimisation"
+                     break
+                 
+                 i+=1
+                 #modulo addition allows for loop (i) resetting when particle passes 360 degrees
+                 i=i%(len(fields.E_prop_list()[0])-1)
 
-#            print(B,' B')
-#            print(B_0,' B_0')
+        def M_effect(P_pos,P_vel,P_mass,P_charge,KE):
+            bz=-(P_mass*np.linalg.norm(P_vel)/((P_charge)*fields.E_prop_list()[3]))
+            B=np.array([0.0,0.0,bz], dtype=float)
             return(B)
