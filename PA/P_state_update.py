@@ -3,7 +3,7 @@ import math
 import copy
 import scipy.constants
 import matplotlib.pyplot as plt
-from Fields import fields
+import timeit
 from Field_effect import Field_effect
 class Update:
     """
@@ -18,7 +18,7 @@ class Update:
     """Change to SR motion EQn's split acceleration into subclass"""
     
 #    initialising the program with the required particle state properties
-    def __init__(self, initPos, initVel, initAcc, Name, Mass,Charge,KE, deltaT):
+    def __init__(self, initPos, initVel, initAcc, Name, Mass,Charge,KE, deltaT,E_plate_index):
         self.Name = Name
         self.pos = np.array(initPos,dtype=float)
         self.vel = np.array(initVel,dtype=float)
@@ -27,7 +27,7 @@ class Update:
         self.charge=Charge
         self.DeltaT=deltaT
         self.KE=KE
-
+        self.E_plate_index=E_plate_index
     def __repr__(self):
         return('Particle: {0}, Mass: {1:12.3e}, pos: {2}, vel: {3}, acc: {4}'.format(self.Name,self.mass,self.pos, self.vel,self.acc))
 #   updating KE
@@ -39,8 +39,23 @@ class Update:
         return self.mass*np.array(self.vel,dtype=float)
 #updating pos, vel, acc
     def update(self):
-        print('Vel:  ', np.linalg.norm(self.vel))
-        self.pos +=  self.vel*self.DeltaT
-        self.vel +=  self.acc*self.DeltaT
-        self.E=Field_effect.E_effect(self.pos,self.vel,self.charge)
-        self.acc = (self.charge/self.mass)*((self.E)+np.cross(self.vel,Field_effect.M_effect(self.pos,self.vel,self.mass,self.charge,self.KE)))
+        start = timeit.default_timer()
+#        print('Vel:  ', np.linalg.norm(self.vel))
+        N=1
+        for RK_I in range(0,N):
+            print('Vel:  ', np.linalg.norm(self.vel))
+            print('Pos:  ', self.pos)
+
+            self.pos +=  self.vel*self.DeltaT/N+0.5*self.acc*self.DeltaT**2/N
+            self.vel +=  self.acc*self.DeltaT/N+0.5*self.acc*self.DeltaT**2/N
+            fields=Field_effect(self.pos,self.vel,self.charge,self.mass, self.E_plate_index)
+            self.acc = (self.charge/self.mass)*((fields.E_effect()[0])+np.cross(self.vel,fields.M_effect()))
+        self.E_plate_index=fields.E_effect()[1]
+        
+        stop = timeit.default_timer()
+        print('update time', stop-start)
+        
+        
+        
+        
+        

@@ -13,7 +13,7 @@ class fields:
 #        number of source plates to generate
         num_E_source=200
 #        defining the accelerator radius
-        Path_rad=1000
+        Path_rad=10000
 
 #        generating the sources equally spaced across the accelerator path
         for i in range(0,num_E_source):
@@ -22,7 +22,7 @@ class fields:
 #        Setting the charge density of each source plate
         E_source_chargedensity_list=[]
         for i in range(0,len(E_source_pos_list)):
-            E_source_chargedensity_list.append(1*10**-17)
+            E_source_chargedensity_list.append(1*10**-13)
 #        making the E lists circular by linking the last and first entry
         E_source_pos_list.append(E_source_pos_list[0])
         E_source_chargedensity_list.append(E_source_chargedensity_list[0])
