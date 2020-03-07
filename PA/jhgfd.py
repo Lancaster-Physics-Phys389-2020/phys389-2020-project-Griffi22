@@ -16,7 +16,7 @@ class C0:
     objacked=C1(0)
     for i in range(0,5):
         objacked.updater()
-        print(objacked.objacked)
+        print(objacked.objacked_value)
 
 
 

@@ -12,12 +12,12 @@ from P_state_update import Update
 class Particle_data_list:
 #    DeltaT=float(input("deltaT: "))
 #    automatic setting deltaT for speed of dev delete later
-    DeltaT=0.01
+    DeltaT=0.0001
 #    defining the list of particles and their inital properties for simlation
-    Particle_list={'Proton':Update([10000,0.0,0],[0,100000,0],[0,0,0],'Proton',const.m_p,const.elementary_charge,0, DeltaT,0),
-                   'Electron':Update([0,0,0],[0,0,0],[0,0,0],'Electron',1,-1,0, DeltaT, 0),
-                   'Positron':Update([0,0,0],[0,0,0],[0,0,0],'Positron',1,1,0, DeltaT, 0),
-                   'Pion+':Update([0,0,0],[0,0,0],[0,0,0],'Pion+',1,1,0, DeltaT, 0),
-                   'Pion-':Update([0,0,0],[0,0,0],[0,0,0],'Pion-',1,-1,0, DeltaT, 0),
-                   'Kaon+':Update([0,0,0],[0,0,0],[0,0,0],'Kaon+',1,1,0, DeltaT, 0),
-                   'Kaon-':Update([0,0,0],[0,0,0],[0,0,0],'Kaon-',1,-1,0, DeltaT, 0)}
+    Particle_list={'Proton':Update([10000,10.0,0],[0,100000,0],[0,0,0],[0,0,0],[0,0,0],'Proton',const.m_p,const.elementary_charge,0, DeltaT,0),
+                   'Electron':Update([0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],'Electron',1,-1,0, DeltaT, 0),
+                   'Positron':Update([0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],'Positron',1,1,0, DeltaT, 0),
+                   'Pion+':Update([0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],'Pion+',1,1,0, DeltaT, 0),
+                   'Pion-':Update([0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],'Pion-',1,-1,0, DeltaT, 0),
+                   'Kaon+':Update([0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],'Kaon+',1,1,0, DeltaT, 0),
+                   'Kaon-':Update([0,0,0],[0,0,0],[0,0,0],[0,0,0],[0,0,0],'Kaon-',1,-1,0, DeltaT, 0)}
