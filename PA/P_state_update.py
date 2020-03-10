@@ -41,20 +41,15 @@ class Update:
     def momentum(self):
         return self.mass*np.array(self.vel,dtype=float)
 #updating pos, vel, acc
-    def update(self):
+    def update(self, Testing_OnOff, Testing_state):
         start = timeit.default_timer()
-#        print('Vel:  ', np.linalg.norm(self.vel))
-#        N=1
-#        for RK_I in range(0,N):
         print('Vel:  ', np.linalg.norm(self.vel)*self.DeltaT)
         print('Pos:  ', self.pos)
         print('Acc:  ', self.acc)#*self.DeltaT)
         print('Acc_dt1:  ', np.linalg.norm(self.Acc_dt1)*self.DeltaT)
         Particle_state=[self.pos,self.vel,self.charge,self.mass, self.E_plate_index]
-
-       # fields=Field_effect(self.pos,self.vel,self.charge,self.mass, self.E_plate_index,False,None)
         fields=Field_effect(Particle_state, False, None)
-        B=fields.M_effect()
+        B=fields.M_effect(False,None)
         E_eff_result_list=fields.E_effect()
         E=E_eff_result_list[0]
         self.E_plate_index=E_eff_result_list[1]

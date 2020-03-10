@@ -26,7 +26,7 @@ class Simulation:
         #start time
     T_i=0
         #end time (adjusted so timestep is accounted for)
-    T_f=round(0.01/PDL.DeltaT)
+    T_f=round(0.1/PDL.DeltaT)
     
 #    Particle selection
     print("Particle list: Proton, Electron, Positron, Pion+, Pion-, Koan+, Kaon-")

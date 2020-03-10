@@ -6,7 +6,7 @@ from Fields import fields
 import timeit
 class Field_effect:
     #    def __init__(self, P_state_pos, P_state_vel, P_state_charge, P_state_mass, E_plate_index,testing,TestParameters):
-        def __init__(self, Simulation_state, Testing_OnOff,Testing_state):
+        def __init__(self, Simulation_state, Testing_OnOff, Testing_state):
             if Testing_OnOff == False:
                 self.P_pos=Simulation_state[0]
                 self.P_vel=Simulation_state[1]
@@ -21,6 +21,7 @@ class Field_effect:
                 self.P_mass=Testing_state[3]
                 self.E_plate_index=Testing_state[4]
                 self.E_prop_list=Testing_state[5]
+
         #resultant effect of local electric source plates
         def E_effect(self):
             #timing used for testing optimisation
@@ -56,9 +57,14 @@ class Field_effect:
                  #modulo addition allows for loop (i) resetting when particle passes 360 degrees
                  i=i%(len(self.E_prop_list[0])-1)
 
-        def M_effect(self):
-            bz=-(self.P_mass*np.linalg.norm(self.P_vel)/((self.P_charge)*self.E_prop_list[3]))
-            B=np.array([0.0,0.0,bz], dtype=float)
+        def M_effect(self, Testing_OnOff,Testing_state):
+            if Testing_OnOff == False:
+                bz=-(self.P_mass*np.linalg.norm(self.P_vel)/((self.P_charge)*self.E_prop_list[3]))
+                B=np.array([0.0,0.0,bz], dtype=float)
+            if Testing_OnOff == True:
+                bz=-(Testing_state[0]*np.linalg.norm(Testing_state[1])/((Testing_state[2])*Testing_state[3]))
+                B=np.array([0.0,0.0,bz], dtype=float)
+
             return(B)
 
 
