@@ -10,21 +10,48 @@ from Fields import fields
 #from Field_effect import Field_effect
 from P_state_update import Update
 from Particle_list import Particle_data_list as PDL
+from c1 import C1
+
+class C0:
+    objacked=C1(0)
+    for i in range(0,5):
+        objacked.updater()
+        print(objacked.objacked_value)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #Epos=[[0,0],[1,0],[1,1]]
 #Epos_loop=cycle(Epos)
 ##for Epos_i in Epos_loop:
-#print(Epos_loop[12])
-i=0
-print(len(fields.E_prop_list()[0]))
-while i<len(fields.E_prop_list()[0])+2:
-    print(i)
-    Phi_E_i1=round(np.angle(fields.E_prop_list()[0][i+1][0]+fields.E_prop_list()[0][i+1][1]*1j, deg=True)%360)
-    Phi_E_i0=round(np.angle(fields.E_prop_list()[0][i][0]+fields.E_prop_list()[0][i][1]*1j, deg=True)%360)
-    if Phi_E_i1>Phi_E_i0 or i==len(fields.E_prop_list()[0])-2:
-        print('big money')
-    i+=1
-    i=i%(len(fields.E_prop_list()[0])-1)
-    print(Phi_E_i0,Phi_E_i1)
+##print(Epos_loop[12])
+#i=0
+#print(len(fields.E_prop_list()[0]))
+#while i<len(fields.E_prop_list()[0])+2:
+#    print(i)
+#    Phi_E_i1=round(np.angle(fields.E_prop_list()[0][i+1][0]+fields.E_prop_list()[0][i+1][1]*1j, deg=True)%360)
+#    Phi_E_i0=round(np.angle(fields.E_prop_list()[0][i][0]+fields.E_prop_list()[0][i][1]*1j, deg=True)%360)
+#    if Phi_E_i1>Phi_E_i0 or i==len(fields.E_prop_list()[0])-2:
+#        print('big money')
+#    i+=1
+#    i=i%(len(fields.E_prop_list()[0])-1)
+#    print(Phi_E_i0,Phi_E_i1)
 
 'My file for ideas and workings:       ignore this file'
 #y=[100,50,0,-50,-100,-50,0,50,100]
